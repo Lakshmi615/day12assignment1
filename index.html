@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1 class="app-title">Weather App</h1>
+
+        <div class="search-box">
+            <input type="text" id="cityInput" placeholder="Enter city name...">
+            <button id="searchButton" class="search-button">Search Button</button>
+        </div>
+
+        <div class="weather-info">
+            <div class="main-weather-data">
+                <p class="temperature" id="temperature">--</p>
+                <p class="city-name" id="cityName">City</p>
+                <p class="datetime" id="datetime">--:-- ----</p>
+                <p class="description" id="description">--</p>
+            </div>
+            </div>
+
+        <div class="error-message" id="errorMessage"></div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
+<style>
+    body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #A7DBD8;
+    color: #4D4D4D;
+    overflow: hidden;
+}
+
+.container {
+    background-color: #A7DBD8;
+    padding: 30px 40px;
+    border-radius: 15px;
+    text-align: center;
+    width: 90%;
+    max-width: 800px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.app-title {
+    font-size: 2.8em;
+    margin-bottom: 40px;
+    color: white;
+    font-weight: 600;
+}
+
+.search-box {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 50px;
+    width: 100%;
+    justify-content: center;
+}
+
+#cityInput {
+    flex-grow: 1;
+    padding: 12px 20px;
+    border: none;
+    border-bottom: 2px solid #555;
+    background: transparent;
+    font-size: 1.2em;
+    color: #4D4D4D;
+    outline: none;
+    max-width: 250px;
+}
+
+#cityInput::placeholder {
+    color: rgba(77, 77, 77, 0.7);
+}
+
+.search-button {
+    padding: 12px 25px;
+    background-color: white;
+    color: #4D4D4D;
+    border: none;
+    border-radius: 25px;
+    font-size: 1.1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.search-button:hover {
+    background-color: #f0f0f0;
+    color: #333;
+}
+
+.weather-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+    width: 100%;
+    padding-left: 20px;
+}
+
+.main-weather-data {
+    margin-bottom: 20px;
+}
+
+.temperature {
+    font-size: 8em;
+    font-weight: bold;
+    color: white;
+    line-height: 1;
+    margin: 0;
+}
+
+.city-name {
+    font-size: 3em;
+    font-weight: 500;
+    margin: 10px 0;
+    color: #4D4D4D;
+}
+
+.datetime {
+    font-size: 1.5em;
+    margin: 5px 0 15px;
+    color: #4D4D4D;
+}
+
+.description {
+    font-size: 1.8em;
+    font-weight: 300;
+    text-transform: capitalize; 
+    color: #4D4D4D;
+    margin-top: 5px;
+}
+
+.error-message {
+    color: #FF6347; 
+    font-size: 1.1em;
+    margin-top: 20px;
+    min-height: 25px; 
+}
+
+@media (max-width: 768px) {
+    .app-title {
+        font-size: 2.2em;
+        margin-bottom: 30px;
+    }
+    .search-box {
+        flex-direction: column;
+        gap: 10px;
+        margin-bottom: 30px;
+    }
+    #cityInput {
+        max-width: none;
+        width: 80%;
+    }
+    .search-button {
+        width: 80%;
+        max-width: 200px;
+    }
+    .weather-info {
+        align-items: center;
+        text-align: center;
+        padding-left: 0;
+    }
+    .temperature {
+        font-size: 6em;
+    }
+    .city-name {
+        font-size: 2.5em;
+    }
+    .datetime {
+        font-size: 1.2em;
+    }
+    .description {
+        font-size: 1.5em;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 20px;
+    }
+    .app-title {
+        font-size: 1.8em;
+    }
+    .temperature {
+        font-size: 5em;
+    }
+    .city-name {
+        font-size: 2em;
+    }
+    .datetime {
+        font-size: 1em;
+    }
+    .description {
+        font-size: 1.2em;
+    }
+    #cityInput, .search-button {
+        padding: 10px 15px;
+        font-size: 1em;
+    }
+}
+</style>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+    const cityInput = document.getElementById('cityInput');
+    const searchButton = document.getElementById('searchButton');
+    const temperatureDisplay = document.getElementById('temperature');
+    const cityNameDisplay = document.getElementById('cityName');
+    const datetimeDisplay = document.getElementById('datetime');
+    const descriptionDisplay = document.getElementById('description');
+    const errorMessageDisplay = document.getElementById('errorMessage');
+
+    const API_KEY = '12c1119b3e91d244c8bc47b84fcf65e1';
+    const BASE_URL = 'https://api.openweathermap.org/data/2.5/weather';
+
+    function formatCityDateTime(timestamp, timezoneOffsetSeconds) {
+        const now = new Date();
+        const utcMillis = now.getTime() + (now.getTimezoneOffset() * 60 * 1000);
+        const cityLocalTime = new Date(utcMillis + (timezoneOffsetSeconds * 1000));
+        const formattedTime = cityLocalTime.toLocaleTimeString('en-US', {
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: false,
+        });
+        const formattedDay = cityLocalTime.toLocaleDateString('en-US', { weekday: 'long' });
+        return `${formattedTime} ${formattedDay}`;
+    }
+
+    async function fetchWeather(city) {
+        errorMessageDisplay.textContent = '';
+        temperatureDisplay.textContent = '--';
+        cityNameDisplay.textContent = 'City';
+        datetimeDisplay.textContent = '--:-- ----';
+        descriptionDisplay.textContent = '--';
+
+        if (!city) {
+            errorMessageDisplay.textContent = 'Please enter a city name.';
+            return;
+        }
+
+        try {
+            const response = await fetch(`${BASE_URL}?q=${city}&units=metric&appid=${API_KEY}`);
+
+            if (!response.ok) {
+                if (response.status === 404) {
+                    errorMessageDisplay.textContent = 'City not found. Please check spelling.';
+                } else if (response.status === 401) {
+                    errorMessageDisplay.textContent = 'Invalid API key. Check your API key in script.js.';
+                } else if (response.status === 429) {
+                    errorMessageDisplay.textContent = 'Too many requests. Please wait and try again.';
+                } else {
+                    errorMessageDisplay.textContent = `Error: ${response.status} - ${response.statusText}`;
+                }
+                return;
+            }
+
+            const data = await response.json();
+            displayWeather(data);
+
+        } catch (error) {
+            console.error('Error fetching weather data:', error);
+            errorMessageDisplay.textContent = 'Failed to fetch weather data. Check your internet connection.';
+        }
+    }
+
+    function displayWeather(data) {
+        const tempCelsius = Math.round(data.main.temp);
+        const cityName = data.name;
+        const weatherDescription = data.weather[0].description;
+        const timezoneOffsetSeconds = data.timezone;
+
+        temperatureDisplay.textContent = `${tempCelsius}°`;
+        cityNameDisplay.textContent = cityName;
+        descriptionDisplay.textContent = weatherDescription;
+        datetimeDisplay.textContent = formatCityDateTime(data.dt, timezoneOffsetSeconds);
+    }
+
+    searchButton.addEventListener('click', () => {
+        fetchWeather(cityInput.value.trim());
+    });
+
+    cityInput.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter') {
+            fetchWeather(cityInput.value.trim());
+        }
+    });
+
+    fetchWeather('Bhopal');
+});
+</script>
